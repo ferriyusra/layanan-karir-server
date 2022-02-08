@@ -36,7 +36,7 @@ async function index(req, res, next) {
         }
 
 
-        let announcements = await Announcement.find(criteria).limit(parseInt(limit)).skip(parseInt(skip)).select('-__v');
+        let announcements = await Announcement.find(criteria).limit(parseInt(limit)).skip(parseInt(skip)).populate('category').select('-__v');
 
         return res.status(200).json({
             code: 200,
@@ -78,7 +78,7 @@ async function store(req, res, next) {
             let tmp_path = req.file.path;
             let originalExt = req.file.originalname.split('.')[req.file.originalname.split('.').length - 1];
             let filename = req.file.filename + '.' + originalExt;
-            let target_path = path.resolve(config.rootPath, `public/upload/${filename}`);
+            let target_path = path.resolve(config.rootPath, `public/upload/announcement/${filename}`);
 
             const src = fs.createReadStream(tmp_path);
             const dest = fs.createWriteStream(target_path);
@@ -182,7 +182,7 @@ async function update(req, res, next) {
             let tmp_path = req.file.path;
             let originalExt = req.file.originalname.split('.')[req.file.originalname.split('.').length - 1];
             let filename = req.file.filename + '.' + originalExt;
-            let target_path = path.resolve(config.rootPath, `public/upload/${filename}`);
+            let target_path = path.resolve(config.rootPath, `public/upload/announcement/${filename}`);
 
             const src = fs.createReadStream(tmp_path);
             const dest = fs.createWriteStream(target_path);
@@ -193,7 +193,7 @@ async function update(req, res, next) {
 
                     let announcement = await Announcement.findOne({ _id: req.params.id });
 
-                    let currentImage = `${config.rootPath}/public/upload/${announcement.image_url}`;
+                    let currentImage = `${config.rootPath}/public/upload/announcement/${announcement.image_url}`;
 
 
                     if (fs.existsSync(currentImage)) {
@@ -283,7 +283,7 @@ async function destroy(req, res, next) {
             },
         )
 
-        let currentImage = `${config.rootPath}/public/upload/${announcement.image_url}`;
+        let currentImage = `${config.rootPath}/public/upload/announcement/${announcement.image_url}`;
 
         if (fs.existsSync(currentImage)) {
             fs.unlinkSync(currentImage)

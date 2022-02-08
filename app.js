@@ -9,6 +9,8 @@ const categoryRouter = require('./app/category/router');
 
 const companyRouter = require('./app/company/router');
 const industryRouter = require('./app/industry/router');
+const jobRouter = require('./app/job/router');
+const jobSkillRouter = require('./app/jobskill/router');
 
 var app = express();
 
@@ -27,6 +29,8 @@ app.use('/api', categoryRouter);
 
 app.use('/api', companyRouter);
 app.use('/api', industryRouter);
+app.use('/api', jobRouter);
+app.use('/api', jobSkillRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
