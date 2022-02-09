@@ -39,6 +39,40 @@ async function index(req, res, next) {
 
 }
 
+async function show(req, res, next) {
+
+    try {
+
+        let jobId = req.params.id;
+
+        let job = await Job.findOne({ _id: jobId })
+            .populate('company_name')
+            .populate('job_skills')
+            .select('-__v');
+
+        if (job) {
+            return res.status(200).json({
+                code: 200,
+                status: "OK",
+                message: 'Success get detail job',
+                data: job,
+            });
+        } else {
+            return res.status(404).json({
+                code: 404,
+                status: "NOT FOUND",
+                message: 'Id job not found',
+            });
+        }
+
+    } catch (err) {
+
+        next(err)
+
+    }
+
+}
+
 async function store(req, res, next) {
 
 
@@ -204,6 +238,7 @@ async function destroy(req, res, next) {
 
 module.exports = {
     index,
+    show,
     store,
     update,
     destroy,

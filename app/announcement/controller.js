@@ -51,6 +51,35 @@ async function index(req, res, next) {
 
 }
 
+async function show(req, res, next) {
+
+    try {
+
+        let announcement_id = req.params.id;
+
+        let announcement = await Announcement.findOne({ _id: announcement_id }).populate('category').select('-__v');
+
+        if (announcement) {
+            return res.status(200).json({
+                code: 200,
+                status: "OK",
+                message: 'Success get detail announcement',
+                data: announcement
+            })
+        } else {
+            return res.status(404).json({
+                code: 404,
+                status: 'NOT FOUND',
+                message: "Id announcement not found",
+            })
+        }
+
+    } catch (err) {
+        next(err);
+    }
+
+}
+
 async function store(req, res, next) {
 
 
@@ -314,6 +343,7 @@ async function destroy(req, res, next) {
 
 module.exports = {
     index,
+    show,
     store,
     update,
     destroy,

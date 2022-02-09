@@ -20,7 +20,7 @@ async function index(req, res, next) {
         }
 
 
-        let companies = await Company.find(criteria).limit(parseInt(limit)).skip(parseInt(skip)).select('-__v');
+        let companies = await Company.find(criteria).limit(parseInt(limit)).skip(parseInt(skip)).populate('category').select('-__v');
 
         return res.status(200).json({
             code: 200,
@@ -33,6 +33,32 @@ async function index(req, res, next) {
         next(err)
     }
 
+}
+
+async function show(req, res, next) {
+    try {
+
+        let companyId = req.params.id;
+        let company = await Company.findOne({ _id: companyId }).populate('industry').select('-__v');
+
+        if (company) {
+            return res.status(200).json({
+                code: 200,
+                status: "OK",
+                message: 'Success get detail company',
+                data: company,
+            });
+        } else {
+            return res.status(404).json({
+                code: 404,
+                status: "NOT FOUND",
+                message: 'Id company not found',
+            });
+        }
+
+    } catch (err) {
+        next(err)
+    }
 }
 
 async function store(req, res, next) {
@@ -297,6 +323,7 @@ async function destroy(req, res, next) {
 
 module.exports = {
     index,
+    show,
     store,
     update,
     destroy,
