@@ -55,7 +55,7 @@ async function show(req, res, next) {
 
     try {
 
-        let announcement_id = req.params.id;
+        let {announcement_id} = req.params;
 
         let announcement = await Announcement.findOne({ _id: announcement_id }).populate('category').select('-__v');
 

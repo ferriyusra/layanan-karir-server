@@ -19,7 +19,6 @@ const jobSchema = Schema({
     job_description: {
         type: String,
         minlength: [3, 'Panjang deskripsi pekerjaan minimal 3 karakter'],
-        maxlength: [255, 'Panjang deskripsi pekerjaan maksimal 255 karakter'],
         required: [true, 'deskripsi pekerjaan harus diisi']
     },
 
@@ -33,6 +32,11 @@ const jobSchema = Schema({
     job_salaries: {
         type: Array,
         required: [true, 'gaji pekerjaan harus diisi']
+    },
+
+    job_benefits: {
+        type: Array,
+        required: [true, 'tunjangan dan keuntungan pekerjaan harus diisi']
     },
 
     job_url: {
@@ -80,7 +84,7 @@ const jobSchema = Schema({
     }
 
 
-}, { timestamp: true });
+}, { timestamps: true });
 
 
 module.exports = model('Job', jobSchema);

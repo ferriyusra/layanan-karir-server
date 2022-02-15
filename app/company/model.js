@@ -11,10 +11,19 @@ const companySchema = Schema({
         required: [true, 'Nama Perusahaan harus diisi']
     },
 
+    employeeMin: {
+        type: String,
+        required: [true, 'deskripsi perushaan harus diisi']
+    },
+    
+    employeeMax: {
+        type: String,
+        required: [true, 'deskripsi perushaan harus diisi']
+    },
+
     description: {
         type: String,
         minlength: [3, 'Panjang deskripsi perushaan minimal 3 karakter'],
-        maxlength: [255, 'Panjang deskripsi perushaan maksimal 255 karakter'],
         required: [true, 'deskripsi perushaan harus diisi']
     },
 
@@ -38,7 +47,7 @@ const companySchema = Schema({
 
     company_image_url: String,
 
-}, { timestamp: true });
+}, { timestamps: true });
 
 
 module.exports = model('Company', companySchema);

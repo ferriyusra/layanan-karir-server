@@ -13,7 +13,6 @@ const announcementSchema = Schema({
     description: {
         type: String,
         minlength: [3, 'Panjang isi berita  minimal 3 karakter'],
-        maxlength: [255, 'Panjang isi berita maksimal 255 karakter'],
         required: [true, 'Isi berita harus diisi']
     },
     category: {
@@ -21,7 +20,7 @@ const announcementSchema = Schema({
         ref: 'Category'
     },
     image_url: String,
-}, { timestamp: true });
+}, { timestamps: true });
 
 
 module.exports = model('Announcement', announcementSchema);

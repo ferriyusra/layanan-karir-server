@@ -21,7 +21,13 @@ async function index(req, res, next) {
         let jobs = await Job.find(criteria)
             .limit(parseInt(limit))
             .skip(parseInt(skip))
-            .populate('company_name')
+            .populate({
+                path: 'company_name',
+                populate:{
+                    path: 'industry',
+                    model: "Industry"
+                }
+            })
             .populate('job_skills')
             .select('-__v');
 
@@ -43,10 +49,16 @@ async function show(req, res, next) {
 
     try {
 
-        let jobId = req.params.id;
+        let {job_id} = req.params;
 
-        let job = await Job.findOne({ _id: jobId })
-            .populate('company_name')
+        let job = await Job.findOne({ _id: job_id })
+            .populate({
+                path: 'company_name',
+                populate:{
+                    path: 'industry',
+                    model: "Industry"
+                }
+            })
             .populate('job_skills')
             .select('-__v');
 
@@ -62,6 +74,45 @@ async function show(req, res, next) {
                 code: 404,
                 status: "NOT FOUND",
                 message: 'Id job not found',
+            });
+        }
+
+    } catch (err) {
+
+        next(err)
+
+    }
+
+}
+async function showByCompany(req, res, next) {
+
+    try {
+
+        let {company_id} = req.params;
+
+        let job = await Job.findOne({ 'company_name.Company' : company_id })
+            .populate({
+                path: 'company_name',
+                populate:{
+                    path: 'industry',
+                    model: "Industry"
+                }
+            })
+            .populate('job_skills')
+            .select('-__v');
+
+        if (job) {
+            return res.status(200).json({
+                code: 200,
+                status: "OK",
+                message: 'Success get detail job by company',
+                data: job,
+            });
+        } else {
+            return res.status(404).json({
+                code: 404,
+                status: "NOT FOUND",
+                message: 'Id company not found',
             });
         }
 
@@ -242,4 +293,5 @@ module.exports = {
     store,
     update,
     destroy,
+    showByCompany
 }

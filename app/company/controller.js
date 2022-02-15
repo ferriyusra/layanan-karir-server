@@ -20,7 +20,11 @@ async function index(req, res, next) {
         }
 
 
-        let companies = await Company.find(criteria).limit(parseInt(limit)).skip(parseInt(skip)).populate('category').select('-__v');
+        let companies = await Company.find(criteria)
+                .limit(parseInt(limit))
+                .skip(parseInt(skip))
+                .populate('industry')
+                .select('-__v');
 
         return res.status(200).json({
             code: 200,
@@ -38,8 +42,10 @@ async function index(req, res, next) {
 async function show(req, res, next) {
     try {
 
-        let companyId = req.params.id;
-        let company = await Company.findOne({ _id: companyId }).populate('industry').select('-__v');
+        let {company_id} = req.params;
+        let company = await Company.findOne({ _id: company_id })
+                        .populate('industry')
+                        .select('-__v');
 
         if (company) {
             return res.status(200).json({
@@ -200,16 +206,16 @@ async function update(req, res, next) {
             src.on('end', async () => {
                 try {
 
-                    let industry = await Industry.findOne({ _id: req.params.id });
+                    let company = await Company.findOne({ _id: req.params.id });
 
-                    let currentImage = `${config.rootPath}/public/upload/company_profile/${industry.image_url}`;
+                    let currentImage = `${config.rootPath}/public/upload/company_profile/${company.image_url}`;
 
 
                     if (fs.existsSync(currentImage)) {
                         fs.unlinkSync(currentImage)
                     }
 
-                    industry = await Industry.findOneAndUpdate(
+                    company = await Company.findOneAndUpdate(
                         { _id: req.params.id },
                         { ...payload, company_image_url: filename },
                         { new: true, runValidators: true }
@@ -219,7 +225,7 @@ async function update(req, res, next) {
                         code: 200,
                         status: "OK",
                         message: 'Success update company',
-                        data: industry
+                        data: company
                     });
 
                 } catch (err) {

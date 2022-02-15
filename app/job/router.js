@@ -3,7 +3,7 @@ const multer = require('multer')
 const jobController = require('./controller');
 
 router.get('/jobs', jobController.index);
-router.get('/jobs/:id', jobController.show);
+router.get('/jobs/:job_id', jobController.show);
 router.post('/jobs', multer().none(), jobController.store);
 router.put('/jobs/:id', multer().none(), jobController.update);
 router.delete('/jobs/:id', jobController.destroy);

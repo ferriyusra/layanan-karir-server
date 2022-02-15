@@ -10,7 +10,7 @@ const industrySchema = Schema({
         required: [true, 'industri perusahaan harus diisi']
     },
 
-}, { timestamp: true });
+}, { timestamps: true });
 
 
 module.exports = model('Industry', industrySchema);
